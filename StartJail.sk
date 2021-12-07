@@ -1,0 +1,224 @@
+options:
+	ABSC: false
+variables:
+	{coords} = 0
+	{tokens.%player%} = 0
+	{st.no} = 0
+	{st.yes} = 0
+	{n.%player%} = false
+	{y.%player%} = false
+	{%player%.scam} = false
+
+command /startjail [<text>] [<text>]:
+	trigger:
+		if arg 1 is "buy":
+			set {_p} to "MrSnowDK" parsed as player
+			set {_gui} to a new chest inventory with 3 row with name "&6Gefängnis-Token"
+			set slot 0 of {_gui} to gray stained glass pane named "&7"
+			set slot 1 of {_gui} to gray stained glass pane named "&7"
+			set slot 2 of {_gui} to gray stained glass pane named "&7"
+			set slot 3 of {_gui} to gray stained glass pane named "&7"
+			set slot 4 of {_gui} to gray stained glass pane named "&7"
+			set slot 5 of {_gui} to gray stained glass pane named "&7"
+			set slot 6 of {_gui} to gray stained glass pane named "&7"
+			set slot 7 of {_gui} to gray stained glass pane named "&7"
+			set slot 8 of {_gui} to gray stained glass pane named "&7"
+			set slot 9 of {_gui} to gray stained glass pane named "&7"
+			set slot 10 of {_gui} to gold ingot named "&6Gefängnis-Token kaufen" with lore "&7Klicke, um einen Token für &e10000$ &7zu kaufen."
+			set slot 11 of {_gui} to gray stained glass pane named "&7"
+			set slot 12 of {_gui} to gray stained glass pane named "&7"
+			set slot 13 of {_gui} to name tag named "&6Gefängnis-Token" with lore "&7In diesem Menü siehst du wie viele Tokens", "&7du noch besitzt. Außerdem kannst du hier", "&7weitere Gefängnis-Tokens kaufen.", " ", "&7Über &e/startjail &7kannst du dann einen Spieler", and "&7in das Gefängnis voten."
+			set slot 14 of {_gui} to gray stained glass pane named "&7"
+			set slot 15 of {_gui} to gray stained glass pane named "&7"
+			set slot 16 of {_gui} to skull of "MrSnowDK" parsed as offline player named "&6Anzahl der Gefängnis-Tokens" with lore "&7Gefängnis-Tokens: &e%{tokens.%player%}%"
+			set slot 17 of {_gui} to gray stained glass pane named "&7"
+			set slot 18 of {_gui} to gray stained glass pane named "&7"
+			set slot 19 of {_gui} to gray stained glass pane named "&7"
+			set slot 20 of {_gui} to gray stained glass pane named "&7"
+			set slot 21 of {_gui} to gray stained glass pane named "&7"
+			set slot 22 of {_gui} to gray stained glass pane named "&7"
+			set slot 23 of {_gui} to gray stained glass pane named "&7"
+			set slot 24 of {_gui} to gray stained glass pane named "&7"
+			set slot 25 of {_gui} to gray stained glass pane named "&7"
+			set slot 26 of {_gui} to gray stained glass pane named "&7"
+			open {_gui} to player
+		if arg 1 is set:
+			set {_p} to arg-1 parsed as player 
+			if {_p} is online:
+				if arg 2 is set:
+					if {tokens.%player%} is greater than or equal to 1:
+						remove 1 from {tokens.%player%}
+						set {ABSC} to "true"
+						play sound "entity.lightning.thunder" with volume 100 to all players
+						broadcast "&8[&6Start&cJail&8] &e&lAchtung - &c&lStartJail-Abstimmung"
+						broadcast " "
+						broadcast "&8[&6Start&cJail&8] &7Soll der Spieler &e%{_p}% &7eingesperrt werden? &a/ja &c/nein"
+						broadcast "&8[&6Start&cJail&8] &fErsteller: %player%"
+						broadcast "&8[&6Start&cJail&8] &fDauer: 30 Sekunden"
+						broadcast "&8[&6Start&cJail&8] &fBegründung: &c%arg 2%"
+						broadcast "&8[&6Start&cJail&8] &7Stimme für oder gegen die Bestrafung von &e%{_p}% &7ab:"
+						json("@a", "&8[&6GrieferGames&8] ||ttp: || &a[Dafür]||cmd:/ja|| &7- ||ttp: ||&c[Dagegen]||cmd:/nein")
+						wait 27 seconds
+						broadcast "&8[&6GrieferGames&8] &aDie Abstimmung, den Spieler &b%{_p}% &azu bestrafen, endet in &b3 Sekunden!"
+						wait 1 seconds
+						broadcast "&8[&6GrieferGames&8] &aDie Abstimmung, den Spieler &b%{_p}% &azu bestrafen, endet in &b2 Sekunden!"
+						wait 1 seconds
+						broadcast "&8[&6GrieferGames&8] &aDie Abstimmung, den Spieler &b%{_p}% &azu bestrafen, endet in &b1 Sekunden!"
+						wait 1 seconds
+						if {st.yes} is greater than {st.no}:
+							broadcast "&8[&6GrieferGames&8] &7Die Abstimmung &e%{_p}% &7ging &a%{st.yes}% &7zu &c%{st.no}% &7aus!"
+							broadcast "&8[&6GrieferGames&8] &7&e%{_p}% &7wurde bestraft!"
+							set {scammer.%player%} to "{_p}"
+							teleport {scammer.%player%} to location at {coords}
+							set {ABSC} to "false"
+							set {st.no} to 0
+							set {st.yes} to 0
+							set {n.%player%} to "false"
+							set {y.%player%} to "false"
+							set {%player%.scam} to "true"
+							send "&8[&6GrieferGames&8] &cDu wurdest in das Gefängnis eingesperrt." to {_p}
+						if {st.no} is greater than or equal to {st.no}:
+							if {ABSC} is "true":
+								broadcast "&8[&6GrieferGames&8] &7Die Abstimmung &e%{_p}% &7ging &a%{st.yes}% &7zu &c%{st.no}% &7aus!"
+								broadcast "&8[&6GrieferGames&8] &7&e%{_p}% &7wurde nicht bestraft!"
+								set {ABSC} to "false"
+								set {st.no} to 0
+								set {st.yes} to 0
+								set {n.%player%} to "false"
+								set {y.%player%} to "false"
+					else:
+						send "&8[&6GrieferGames&8] &cDu hast keine Tokens mehr übrig." to player
+				if arg 2 is not set:
+					send "&8[&6Start&cJail&8] &7Verwende: &e/startjail <Spieler> <Grund>&7." to player
+					send "&8[&6Start&cJail&8] &7Kaufe Tokens mit &e/startjail buy&7!" to player
+			if arg 1 is not "buy":
+				if {_p} is not online:
+					send "&8[&6Start&cJail&8] &cDer Spieler &e%arg 1% &cist nicht online!" to player
+		else:		
+			send "&8[&6Start&cJail&8] &7Verwende: &e/startjail <Spieler> <Grund>&7." to player
+			send "&8[&6Start&cJail&8] &7Kaufe Tokens mit &e/startjail buy&7!" to player
+
+on inventory click:
+	if name of event-inventory is "&6Gefängnis-Token":
+		cancel event
+		if index of event-slot = 10:
+			cancel event
+			make player execute command "/stbuy"
+		if index of event-slot = 13:
+			cancel event
+		if index of event-slot = 16:
+			cancel event
+
+command /stbuy:
+	trigger:
+		set {_gui1} to a new chest inventory with 5 row with name "&6Kaufbestätigung"
+		set slot 0 of {_gui1} to gray stained glass pane named "&7"
+		set slot 1 of {_gui1} to gray stained glass pane named "&7"
+		set slot 2 of {_gui1} to gray stained glass pane named "&7"
+		set slot 3 of {_gui1} to gray stained glass pane named "&7"
+		set slot 4 of {_gui1} to gray stained glass pane named "&7"
+		set slot 5 of {_gui1} to gray stained glass pane named "&7"
+		set slot 6 of {_gui1} to gray stained glass pane named "&7"
+		set slot 7 of {_gui1} to gray stained glass pane named "&7"
+		set slot 8 of {_gui1} to gray stained glass pane named "&7"
+		set slot 9 of {_gui1} to gray stained glass pane named "&7"
+		set slot 10 of {_gui1} to gray stained glass pane named "&7"
+		set slot 11 of {_gui1} to gray stained glass pane named "&7"
+		set slot 12 of {_gui1} to gray stained glass pane named "&7"
+		set slot 13 of {_gui1} to name tag named "&6Gefängnis-Token" with lore "&7Möchtest du wirklich einen Gefängnis-Token für &e10000$ &7kaufen?"
+		set slot 14 of {_gui1} to gray stained glass pane named "&7"
+		set slot 15 of {_gui1} to gray stained glass pane named "&7"
+		set slot 16 of {_gui1} to gray stained glass pane named "&7"
+		set slot 17 of {_gui1} to gray stained glass pane named "&7"
+		set slot 18 of {_gui1} to gray stained glass pane named "&7"
+		set slot 19 of {_gui1} to gray stained glass pane named "&7"
+		set slot 20 of {_gui1} to gray stained glass pane named "&7"
+		set slot 21 of {_gui1} to gray stained glass pane named "&7"
+		set slot 22 of {_gui1} to gray stained glass pane named "&7"
+		set slot 23 of {_gui1} to gray stained glass pane named "&7"
+		set slot 24 of {_gui1} to gray stained glass pane named "&7"
+		set slot 25 of {_gui1} to gray stained glass pane named "&7"
+		set slot 26 of {_gui1} to gray stained glass pane named "&7"
+		set slot 27 of {_gui1} to gray stained glass pane named "&7"
+		set slot 28 of {_gui1} to skull of "Talia" parsed as offline player named "&2Ja." with lore "&7Klicke, um den Kauf zu bestätigen."
+		set slot 29 of {_gui1} to gray stained glass pane named "&7"
+		set slot 30 of {_gui1} to gray stained glass pane named "&7"
+		set slot 31 of {_gui1} to gray stained glass pane named "&7"
+		set slot 32 of {_gui1} to gray stained glass pane named "&7"
+		set slot 33 of {_gui1} to gray stained glass pane named "&7"
+		set slot 34 of {_gui1} to skull of "TheNewTsar" parsed as offline player named "&4Nein." with lore "&7Klicke, um den Kauf abzubrechen."
+		set slot 35 of {_gui1} to gray stained glass pane named "&7"
+		set slot 36 of {_gui1} to gray stained glass pane named "&7"
+		set slot 37 of {_gui1} to gray stained glass pane named "&7"
+		set slot 38 of {_gui1} to gray stained glass pane named "&7"
+		set slot 39 of {_gui1} to gray stained glass pane named "&7"
+		set slot 40 of {_gui1} to gray stained glass pane named "&7"
+		set slot 41 of {_gui1} to gray stained glass pane named "&7"
+		set slot 42 of {_gui1} to gray stained glass pane named "&7"
+		set slot 43 of {_gui1} to gray stained glass pane named "&7"
+		set slot 44 of {_gui1} to gray stained glass pane named "&7"
+		open {_gui1} to player
+on inventory click:
+	if name of event-inventory is "&6Kaufbestätigung":
+		cancel event
+		if index of event-slot = 28:
+			cancel event
+			if player's balance is greater than or equal to 10000:
+				remove 10000 from player's balance
+				add 1 to {tokens.%player%}
+				play sound "entity.experience_orb.pickup" with volume 100 to player
+				close player's inventory
+				send "&8[&6Start&cJail&8] &aDie Transaktion war erfolgreich." to player
+			else:
+				close player's inventory
+				send "&8[&6Start&cJail&8] &cDein Guthaben reicht leider nicht aus." to player
+		if index of event-slot = 34:
+			cancel event
+			close player's inventory
+			send "&8[&6Start&cJail&8] &cDie Transaktion wurde abgebrochen." to player
+
+
+command /ja:
+	trigger:
+		if {ABSC} is "true":
+			if {y.%player%} is "true":
+				send "&8[&6GrieferGames&8] &7Du hast für &aJa &7gestimmt!" to player
+			if {n.%player%} is "true":
+				set {n.%player%} to "false"
+				set {y.%player%} to "true"
+				send "&8[&6GrieferGames&8] &7Du hast für &aJa &7gestimmt!" to player
+				remove 1 from {st.no}
+				add 1 to {st.yes}
+			if {y.%player%} is "false":
+				set {n.%player%} to "false"
+				set {y.%player%} to "true"
+				send "&8[&6GrieferGames&8] &7Du hast für &aJa &7gestimmt!" to player
+				add 1 to {st.yes}
+		if {ABSC} is "false":
+			send "&8[&6GrieferGames&8] &cEs läuft derzeit keine Abstimmung." to player
+
+
+command /nein:
+	trigger:
+		if {ABSC} is "true":
+			if {n.%player%} is "true":
+				send "&8[&6GrieferGames&8] &7Du hast für &cNein &7gestimmt!" to player	
+			if {y.%player%} is "true":
+				set {y.%player%} to "false"
+				set {n.%player%} to "true"
+				send "&8[&6GrieferGames&8] &7Du hast für &cNein &7gestimmt!" to player
+				remove 1 from {st.yes}
+				add 1 to {st.no}
+			if {n.%player%} is "false":
+				set {y.%player%} to "false"
+				set {n.%player%} to "true"
+				send "&8[&6GrieferGames&8] &7Du hast für &cNein &7gestimmt!" to player
+				add 1 to {st.no}	
+		if {ABSC} is "false":
+			send "&8[&6GrieferGames&8] &cEs läuft derzeit keine Abstimmung." to player
+
+on join:
+    if {%player%.scam} is "true":
+        teleport {scammer.%player%} to location at {coords}
+    else:
+       
